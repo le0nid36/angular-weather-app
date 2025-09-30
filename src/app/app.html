@@ -1,0 +1,112 @@
+<div class="app-container">
+
+  <!-- Header -->
+  <header class="header">
+    <h1>Weather Dashboard</h1>
+  </header>
+
+  <!-- User Location Weather -->
+  <section *ngIf="userCity" class="featured">
+    <h2> Your Location</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>{{ userCity.name }}</h3>
+        <img
+          *ngIf="userCity.icon"
+          [src]="'https://openweathermap.org/img/wn/' + userCity.icon + '@2x.png'"
+          alt="Weather icon"
+        />
+        <p class="temp">{{ userCity.temp }}°C</p>
+        <p class="desc">{{ userCity.description }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Cities -->
+  <section class="featured">
+    <h2> Featured Cities</h2>
+    <div class="card-grid">
+      <div class="card" *ngFor="let city of featuredCities; let i = index">
+        <h3>{{ city.name }}</h3>
+        <img
+          *ngIf="city.icon"
+          [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
+          alt="Weather icon"
+        />
+        <p class="temp">{{ city.temp }}°C</p>
+        <p class="desc">{{ city.description }}</p>
+        <!-- Forecast Chart -->
+        <canvas [id]="'chart-' + i" width="200" height="100"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Weather News -->
+  <section class="news">
+    <h2>Weather News</h2>
+    <div class="news-cards">
+      <div class="news-card" *ngFor="let news of weatherNews">
+        <img *ngIf="news.image" [src]="news.image" alt="news image" />
+        <h3>{{ news.title }}</h3>
+        <a [href]="news.url" target="_blank">Read more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lab Section -->
+  <section class="lab">
+    <h2>Sequential vs Parallel Requests</h2>
+    <div class="hero">
+      <input
+        type="text"
+        [(ngModel)]="citiesInput"
+        placeholder="Enter cities (comma separated)"
+      />
+      <button (click)="runSequential()">Run Sequential</button>
+      <button (click)="runParallel()">Run Parallel</button>
+    </div>
+
+    <div class="lab-results">
+      <!-- Sequential -->
+      <div class="results-column">
+        <h3>Sequential Run</h3>
+        <p *ngIf="sequentialTime !== null">
+          Took {{ sequentialTime }} ms
+        </p>
+        <div class="card-grid">
+          <div class="card" *ngFor="let city of sequentialData">
+            <h3>{{ city.name }}</h3>
+            <img
+              *ngIf="city.icon"
+              [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
+              alt="Weather icon"
+            />
+            <p class="temp">{{ city.temp }}°C</p>
+            <p class="desc">{{ city.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parallel -->
+      <div class="results-column">
+        <h3>Parallel Run</h3>
+        <p *ngIf="parallelTime !== null">
+          Took {{ parallelTime }} ms
+        </p>
+        <div class="card-grid">
+          <div class="card" *ngFor="let city of parallelData">
+            <h3>{{ city.name }}</h3>
+            <img
+              *ngIf="city.icon"
+              [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
+              alt="Weather icon"
+            />
+            <p class="temp">{{ city.temp }}°C</p>
+            <p class="desc">{{ city.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
