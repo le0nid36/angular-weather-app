@@ -3,8 +3,8 @@
     <h1>
       Weather Dashboard
     </h1>
-    <button class="toggle" (click)="toggleExecStyle()">
-      <mat-icon fontIcon="swap_horiz" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
+    <button [matTooltip]="execStyle === 'sequential' ? 'Toggle Parallel execution' : 'Toggle Sequential execution'" class="toggle" (click)="toggleExecStyle()">
+      <mat-icon fontIcon="swap_horiz" aria-hidden="false"></mat-icon>
     </button>
   </header>
 

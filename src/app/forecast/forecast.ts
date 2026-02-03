@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { concat, delay, forkJoin, map, mergeMap, of } from 'rxjs';
+import { MatAnchor } from "@angular/material/button";
 
 @Component({
   selector: 'app-forecast',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatAnchor],
   templateUrl: './forecast.html',
-  styleUrl: './forecast.css'
+  styleUrl: './forecast.scss'
 })
 export class Forecast implements OnInit {
   @Input() execStyle: 'sequential' | 'parallel' = 'sequential';
@@ -20,7 +21,6 @@ export class Forecast implements OnInit {
 
   sequentialData: any[] = [];
   parallelData: any[] = [];
-  chartsRendered = false;
 
   apiKey = '9aeb3af53f195212ef846c43ad2c0d6a';
   apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=';
@@ -135,7 +135,6 @@ export class Forecast implements OnInit {
     this.parallelData = [];
 
     const cities = this.citiesInput.split(',').map(c => c.trim());
-    const start = performance.now();
 
     const requests = cities.map(city =>
       this.fetchWeather(city).pipe(delay(1000))
