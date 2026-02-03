@@ -1,197 +1,31 @@
-/* General Layout */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  background: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 100%);
-  color: #333;
-}
-
-body {
-  background: url('https://source.unsplash.com/1600x900/?sky,clouds') no-repeat center center fixed;
-  background-size: cover;
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.app-container {
+.container {
   backdrop-filter: blur(6px);
   background: rgba(255, 255, 255, 0.2);
-  min-height: 100vh;
-  padding-bottom: 40px;
-}
-
-
-/* Header */
-/*.header {*/
-/*  background: #4a90e2;*/
-/*  color: white;*/
-/*  padding: 20px;*/
-/*  text-align: center;*/
-/*  border-bottom: 3px solid #357abd;*/
-/*}*/
-/*.header h1 {*/
-/*  margin: 0;*/
-/*  font-size: 2.2rem;*/
-/*  letter-spacing: 1px;*/
-/*}*/
-
-/* Featured Cities + Results Cards */
-.card-grid {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.card {
-  flex: 1 1 200px;
-  max-width: 220px;
-  padding: 15px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.6);   /* dark overlay */
-  color: #fff;                      /* white text */
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: transform 0.2s;
-}
-.card:hover {
-  transform: translateY(-5px);
-}
-.card img {
-  margin: 10px 0;
-}
-.card h3, .card p {
-  color: #fff !important;
-}
-
-
-.temp {
-  font-size: 22px;
-  font-weight: bold;
-  color: #4a90e2;
-}
-.featured h2 {
-  padding: 5px;
-}
-
-/* Lab Section */
-.lab .hero {
-  background: #eef6ff;
-  color: #333;
   padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 10px;
+  box-sizing: border-box;
+  height: 100vh;
+}
+
+.header {
+  color: #f1f1f1;
   text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.lab .hero input {
-  padding: 10px;
-  width: 300px;
+
+.toggle {
+  padding: 5px;
   border-radius: 20px;
-  border: 1px solid #ccc;
-}
-.lab .hero button {
-  padding: 10px 20px;
-  margin-left: 10px;
-  border-radius: 20px;
-  background: #4a90e2;
-  color: white;
   border: none;
   cursor: pointer;
 }
-.lab .hero button:hover {
-  background: #357abd;
-}
 
-/* Weather News */
-.news {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 40px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  color: #111;
+.toggle:hover {
+  background-color: white;
 }
-.news h2 {
-  margin-bottom: 15px;
-  font-size: 1.6rem;
-  color: #111;
-}
-.news ul {
-  list-style: none;
-  padding-left: 0;
-}
-.news li {
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #111;
-}
-
-/* News Cards (optional if using images for articles) */
-.news-cards {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
-.news-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  padding: 15px;
-  width: 250px;
-  flex: 1 1 200px;
-}
-.news-card img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-.news-card a {
-  display: inline-block;
-  margin-top: 10px;
-  color: #4a90e2;
-  text-decoration: none;
-}
-.news-card a:hover {
-  text-decoration: underline;
-}
-/*.header {*/
-/*  background: linear-gradient(135deg, #4a90e2, #357abd);*/
-/*  padding: 25px;*/
-/*  text-align: center;*/
-/*  border-bottom: none;*/
-/*}*/
-
-/*.header h1 {*/
-/*  display: inline-block;*/
-/*  background: rgba(255, 255, 255, 0.15);*/
-/*  padding: 10px 20px;*/
-/*  border-radius: 12px;*/
-/*  font-size: 2.2rem;*/
-/*  font-weight: bold;*/
-/*  color: #fff;*/
-/*  text-shadow: 2px 2px 6px rgba(0,0,0,0.4);*/
-/*}*/
-
-.header {
-  background: linear-gradient(135deg, #141e30, #243b55); /* dark navy blend */
-  color: #f1f1f1;
-  padding: 25px;
-  text-align: center;
-  border-bottom: 3px solid #4a90e2;
-}
-
-/*.header h1 {*/
-/*  font-size: 2.5rem;*/
-/*  background: linear-gradient(90deg, #ff8a00, #e52e71);*/
-/*  -webkit-background-clip: text;*/
-/*  -webkit-text-fill-color: transparent;*/
-/*  animation: shine 3s infinite linear;*/
-/*}*/
 
 @keyframes shine {
   from { background-position: 0% }
   to { background-position: 200% }
 }
-

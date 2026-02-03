@@ -3,6 +3,8 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 100%);
+  color: #333;
 }
 
 app-root {
@@ -31,3 +33,6 @@ app-root * {
   position: relative;
   z-index: 1;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
