@@ -1,60 +1,24 @@
 <section class="lab">
   <div class="hero">
-    <input type="text" [(ngModel)]="citiesInput" placeholder="Enter cities (comma separated)" />
-    <button matButton="elevated" (click)="search()">Search</button>
+    <h3 [ngStyle]="{color: execStyle === 'sequential' ? 'green' : 'blue'}">
+      Mode: {{ execStyle.toUpperCase() }}
+      <mat-icon [fontIcon]="execStyle === 'sequential' ? 'hourglass_empty' : 'bolt'" aria-hidden="false"></mat-icon>
+    </h3>
+    <div class="inline">
+      <input type="text" [(ngModel)]="citiesInput" placeholder="Enter cities (comma separated)" (keyup.enter)="search()"/>
+      <button matButton="elevated" (click)="search()">Search</button>
+    </div>
   </div>
 </section>
 
 <section class="featured">
-  <div class="card-grid">
-    @for (city of data | async; track $index) {
-      <div class="card">
-        <h3>{{ city.name }}</h3>
-        @if(city.icon) {
-            <img
-              [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
-              alt="Weather icon"
-            />
-        }
-        <p class="temp">{{ city.temp }}°C</p>
-        <p class="desc">{{ city.description }}</p>
-      </div>
-    }
-  </div>
+  @if (data$ | async; as data) {
+    <div class="card-grid">
+      @for (city of data; track $index) {
+        <app-card [city]="city"></app-card>
+      }
+    </div>
+  } @else {
+    <mat-spinner></mat-spinner>
+  }
 </section>
-
-<!-- <section class="lab">
-  <div class="lab-results">
-    <div class="results-column">
-      <div class="card-grid">
-        <div class="card" *ngFor="let city of data">
-          <h3>{{ city.name }}</h3>
-          @if (city.icon) {
-            <img
-              [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
-              alt="Weather icon"
-            />
-          }
-          <p class="temp">{{ city.temp }}°C</p>
-          <p class="desc">{{ city.description }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="results-column">
-      <div class="card-grid">
-        <div class="card" *ngFor="let city of data">
-          <h3>{{ city.name }}</h3>
-
-          <img
-            *ngIf="city.icon"
-            [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
-            alt="Weather icon"
-          />
-          <p class="temp">{{ city.temp }}°C</p>
-          <p class="desc">{{ city.description }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->

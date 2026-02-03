@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { concatMap, delay, forkJoin, from, map, Observable, of, toArray } from 'rxjs';
+import { concatMap, delay, finalize, forkJoin, from, map, Observable, of, toArray } from 'rxjs';
 import { MatAnchor } from "@angular/material/button";
 import { ForecastService } from '../services/forecast.service';
+import { Card } from '../card/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-forecast',
-  imports: [CommonModule, FormsModule, MatAnchor],
+  imports: [CommonModule, FormsModule, MatAnchor, Card, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './forecast.html',
   styleUrl: './forecast.scss'
 })
@@ -17,9 +19,9 @@ export class Forecast implements OnInit {
   citiesInput = '';
   featuredCities = ['New York', 'Tokyo', 'London'];
 
-  data: Observable<any[]> = of([]);
+  data$: Observable<any[]> = of([]);
 
-  constructor(private http: HttpClient, private forecastService: ForecastService) {}
+  constructor(private forecastService: ForecastService) {}
 
   ngOnInit() {
     this.loadDefaultCities();
@@ -63,7 +65,7 @@ export class Forecast implements OnInit {
   }
 
   loadDefaultCities() {
-    this.data = forkJoin(
+    this.data$ = forkJoin(
       this.featuredCities.map(city =>
         forkJoin([this.fetchWeather(city), this.fetchForecast(city)]).pipe(
           map(([current, forecast]) => ({ ...current, forecast }))
@@ -75,7 +77,7 @@ export class Forecast implements OnInit {
   runSequential() {
     const cities = this.citiesInput.split(',').map(c => c.trim());
 
-    this.data = from(cities).pipe(
+    this.data$ = from(cities).pipe(
       concatMap(city => this.fetchWeather(city)),
       delay(500),
       toArray()
@@ -89,6 +91,6 @@ export class Forecast implements OnInit {
       this.fetchWeather(city).pipe(delay(500))
     );
 
-    this.data = forkJoin(requests);
+    this.data$ = forkJoin(requests);
   }
 }

@@ -1,0 +1,11 @@
+<div class="card">
+    <h3>{{ city.name }}</h3>
+    @if(city.icon) {
+        <img
+            [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
+            alt="Weather icon"
+        />
+    }
+    <p class="temp">{{ city.temp }}°C</p>
+    <p class="desc">{{ city.description }}</p>
+</div>
