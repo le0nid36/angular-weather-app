@@ -7,17 +7,19 @@
 
 <section class="featured">
   <div class="card-grid">
-    <div class="card" *ngFor="let city of featuredCities; let i = index">
-      <h3>{{ city.name }}</h3>
-      @if(city.icon) {
-          <img
-            [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
-            alt="Weather icon"
-          />
-      }
-      <p class="temp">{{ city.temp }}°C</p>
-      <p class="desc">{{ city.description }}</p>
-    </div>
+    @for (city of data | async; track $index) {
+      <div class="card">
+        <h3>{{ city.name }}</h3>
+        @if(city.icon) {
+            <img
+              [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
+              alt="Weather icon"
+            />
+        }
+        <p class="temp">{{ city.temp }}°C</p>
+        <p class="desc">{{ city.description }}</p>
+      </div>
+    }
   </div>
 </section>
 
