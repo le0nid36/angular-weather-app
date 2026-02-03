@@ -1,12 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AfterViewChecked, AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { concat, delay, forkJoin, map, mergeMap, of } from 'rxjs';
-import { Chart, registerables } from 'chart.js';
-
-Chart.register(...registerables);
-
 
 @Component({
   selector: 'app-forecast',
@@ -14,7 +10,7 @@ Chart.register(...registerables);
   templateUrl: './forecast.html',
   styleUrl: './forecast.css'
 })
-export class Forecast implements OnInit, AfterViewInit, AfterViewChecked {
+export class Forecast implements OnInit {
   @Input() execStyle: 'sequential' | 'parallel' = 'sequential';
   citiesInput = '';
   featuredCities: any[] = [];
@@ -39,17 +35,6 @@ export class Forecast implements OnInit, AfterViewInit, AfterViewChecked {
     this.loadFeaturedCities();
     this.loadWeatherNews();
     this.loadUserLocationWeather();
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => this.renderCharts(), 1000);
-  }
-
-  ngAfterViewChecked() {
-    if (this.featuredCities.length && !this.chartsRendered) {
-      this.renderCharts();
-      this.chartsRendered = true;
-    }
   }
 
   search(): void {
@@ -89,7 +74,6 @@ export class Forecast implements OnInit, AfterViewInit, AfterViewChecked {
       )
     ).subscribe(data => {
       this.featuredCities = data;
-      this.renderCharts();
     });
   }
 
@@ -109,37 +93,6 @@ export class Forecast implements OnInit, AfterViewInit, AfterViewChecked {
           });
       });
     }
-  }
-
-  renderCharts() {
-    this.featuredCities.forEach((city, index) => {
-      const ctx = document.getElementById(`chart-${index}`) as HTMLCanvasElement;
-      if (!ctx) return;
-
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: city.forecast.map((f: any) => f.date),
-          datasets: [{
-            data: city.forecast.map((f: any) => f.temp),
-            borderColor: '#ffdd57',
-            backgroundColor: 'rgba(255, 221, 87, 0.3)',
-            tension: 0.3,
-            fill: true,
-            pointRadius: 4,
-            pointBackgroundColor: '#ffdd57'
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#fff' } },
-            y: { ticks: { color: '#fff' } }
-          }
-        }
-      });
-    });
   }
 
   loadWeatherNews() {
