@@ -28,11 +28,10 @@ export class Forecast implements OnInit {
   }
 
   search(): void {
-    const citiesSplit = this.citiesInput.split(',');
-    if(citiesSplit.length === 0 || citiesSplit[0].trim() === '') {
-      this.citiesInput = '';
-      return;
-    }
+    const regex = RegExp(`^[a-zA-Z\s]+(,[a-zA-Z\s]+)*$`);
+    if (!regex.test(this.citiesInput)) {
+        return;
+    };
 
     if (this.execStyle === 'sequential') {
       this.runSequential();
