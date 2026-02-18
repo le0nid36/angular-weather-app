@@ -29,7 +29,7 @@ export class Forecast implements OnInit {
 
   search(): void {
     const citiesSplit = this.citiesInput.split(',');
-    if(citiesSplit.length === 0 || citiesSplit[0].trim() === '' || !this.citiesInput.includes(',')) {
+    if(citiesSplit.length === 0 || citiesSplit[0].trim() === '') {
       this.citiesInput = '';
       return;
     }
