@@ -3,7 +3,7 @@
     <h1>
       Weather Dashboard
     </h1>
-    <button [matTooltip]="execStyle === 'sequential' ? 'Toggle Parallel execution' : 'Toggle Sequential execution'" class="toggle" (click)="toggleExecStyle()">
+    <button [matTooltip]="execStyle === 'sequential' ? 'Toggle Parallel execution' : 'Toggle Sequential execution'" class="toggle" style="display: flex" (click)="toggleExecStyle()">
       <mat-icon fontIcon="swap_horiz" aria-hidden="false"></mat-icon>
     </button>
   </header>
