@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { concatMap, delay, finalize, forkJoin, from, map, Observable, of, toArray } from 'rxjs';
+import { concatMap, delay, forkJoin, from, map, Observable, of, toArray } from 'rxjs';
 import { MatAnchor } from "@angular/material/button";
 import { ForecastService } from '../services/forecast.service';
 import { Card } from '../card/card';
@@ -14,22 +14,23 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './forecast.html',
   styleUrl: './forecast.scss'
 })
-export class Forecast implements OnInit {
+export class Forecast implements OnChanges {
   @Input() execStyle: 'sequential' | 'parallel' = 'sequential';
-  citiesInput = '';
-  featuredCities = ['New York', 'Tokyo', 'London'];
+  featuredCities = 'New York, Tokyo, London';
 
   data$: Observable<any[]> = of([]);
 
   constructor(private forecastService: ForecastService) {}
 
-  ngOnInit() {
-    this.loadDefaultCities();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['execStyle']) {
+      this.search();
+    }
   }
 
   search(): void {
-    const regex = RegExp(`^[a-zA-Z\s]+(,[a-zA-Z\s]+)*$`);
-    if (!regex.test(this.citiesInput)) {
+    const regex = RegExp(`^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$`);
+    if (!regex.test(this.featuredCities)) {
         return;
     };
 
@@ -63,18 +64,8 @@ export class Forecast implements OnInit {
     );
   }
 
-  loadDefaultCities() {
-    this.data$ = forkJoin(
-      this.featuredCities.map(city =>
-        forkJoin([this.fetchWeather(city), this.fetchForecast(city)]).pipe(
-          map(([current, forecast]) => ({ ...current, forecast }))
-        )
-      )
-    );
-  }
-
   runSequential() {
-    const cities = this.citiesInput.split(',').map(c => c.trim());
+    const cities = this.featuredCities.split(',').map(c => c.trim());
 
     this.data$ = from(cities).pipe(
       concatMap(city => this.fetchWeather(city)),
@@ -84,7 +75,7 @@ export class Forecast implements OnInit {
   }
 
   runParallel() {
-    const cities = this.citiesInput.split(',').map(c => c.trim());
+    const cities = this.featuredCities.split(',').map(c => c.trim());
 
     const requests = cities.map(city =>
       this.fetchWeather(city).pipe(delay(500))

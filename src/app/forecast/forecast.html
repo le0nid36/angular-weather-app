@@ -5,7 +5,7 @@
       <mat-icon [fontIcon]="execStyle === 'sequential' ? 'hourglass_empty' : 'bolt'" aria-hidden="false"></mat-icon>
     </h3>
     <div class="inline">
-      <input type="text" [(ngModel)]="citiesInput" placeholder="Enter cities (comma separated)" (keyup.enter)="search()"/>
+      <input type="text" [(ngModel)]="featuredCities" placeholder="Enter cities (comma separated)" (keyup.enter)="search()"/>
       <button matButton="elevated" (click)="search()">Search</button>
     </div>
   </div>
