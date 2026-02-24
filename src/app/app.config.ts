@@ -9,7 +9,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withComponentInputBinding(), withDebugTracing()),
+    provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(),
     importProvidersFrom(FormsModule, HttpClientModule)
   ]
