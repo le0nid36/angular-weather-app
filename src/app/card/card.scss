@@ -5,12 +5,17 @@
   color: #fff;
   text-align: center;
   transition: transform 0.2s;
-  height: 25rem;
-  backdrop-filter: blur();
+  backdrop-filter: blur(10px);
+  z-index: 1;
+
+  h3, .temp {
+    margin: 0;
+  }
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-2px);
+  cursor: pointer;
 }
 
 .card img {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { concatMap, delay, forkJoin, from, map, Observable, of, toArray } from 'rxjs';
 import { MatAnchor } from "@angular/material/button";
@@ -7,25 +7,29 @@ import { ForecastService } from '../services/forecast.service';
 import { Card } from '../card/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-forecast',
-  imports: [CommonModule, FormsModule, MatAnchor, Card, MatIconModule, MatProgressSpinnerModule],
+  imports: [CommonModule, FormsModule, MatAnchor, Card, MatIconModule, MatProgressSpinnerModule, MatIconModule, MatTooltipModule],
   templateUrl: './forecast.html',
   styleUrl: './forecast.scss'
 })
-export class Forecast implements OnChanges {
-  @Input() execStyle: 'sequential' | 'parallel' = 'sequential';
+export class Forecast implements OnInit {
   featuredCities = 'New York, Tokyo, London';
+  execStyle: 'sequential' | 'parallel' = 'sequential';
 
   data$: Observable<any[]> = of([]);
 
   constructor(private forecastService: ForecastService) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['execStyle']) {
-      this.search();
-    }
+  ngOnInit(): void {
+    this.search();
+  }
+
+  toggleExecStyle() {
+    this.execStyle = this.execStyle === 'sequential' ? 'parallel' : 'sequential';
+    this.search();
   }
 
   search(): void {

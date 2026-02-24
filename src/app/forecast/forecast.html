@@ -1,24 +1,37 @@
-<section class="lab">
-  <div class="hero">
-    <h3 [ngStyle]="{color: execStyle === 'sequential' ? 'green' : 'blue'}">
-      Mode: {{ execStyle.toUpperCase() }}
-      <mat-icon [fontIcon]="execStyle === 'sequential' ? 'hourglass_empty' : 'bolt'" aria-hidden="false"></mat-icon>
-    </h3>
-    <div class="inline">
-      <input type="text" [(ngModel)]="featuredCities" placeholder="Enter cities (comma separated)" (keyup.enter)="search()"/>
-      <button matButton="elevated" (click)="search()">Search</button>
-    </div>
-  </div>
-</section>
+<div>
+  <header class="header">
+    <h1>
+      Weather Dashboard
+    </h1>
+    <button [matTooltip]="execStyle === 'sequential' ? 'Toggle Parallel execution' : 'Toggle Sequential execution'" class="toggle" style="display: flex" (click)="toggleExecStyle()">
+      <mat-icon fontIcon="swap_horiz" aria-hidden="false"></mat-icon>
+    </button>
+  </header>
+</div>
 
-<section class="featured">
-  @if (data$ | async; as data) {
-    <div class="card-grid">
-      @for (city of data; track $index) {
-        <app-card [city]="city"></app-card>
-      }
+<div class="forecast">
+  <section class="lab">
+    <div class="hero">
+      <h3 [ngStyle]="{color: execStyle === 'sequential' ? 'green' : 'blue'}">
+        Mode: {{ execStyle.toUpperCase() }}
+        <mat-icon [fontIcon]="execStyle === 'sequential' ? 'hourglass_empty' : 'bolt'" aria-hidden="false"></mat-icon>
+      </h3>
+      <div class="inline">
+        <input type="text" [(ngModel)]="featuredCities" placeholder="Enter cities (comma separated)" (keyup.enter)="search()"/>
+        <button matButton="elevated" (click)="search()">Search</button>
+      </div>
     </div>
-  } @else {
-    <mat-spinner></mat-spinner>
-  }
-</section>
+  </section>
+  
+  <section class="featured">
+    @if (data$ | async; as data) {
+      <div class="card-grid">
+        @for (city of data; track $index) {
+          <app-card [city]="city"></app-card>
+        }
+      </div>
+    } @else {
+      <mat-spinner></mat-spinner>
+    }
+  </section>
+</div>

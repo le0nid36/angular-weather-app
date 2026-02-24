@@ -1,10 +1,9 @@
-:host {
+.forecast {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 20px;
   flex-direction: column;
-  padding: 0 20px;
 }
 
 .featured {
@@ -20,9 +19,10 @@
 }
 
 .card-grid {
-  width: 100%;
+  width: 70%;
   display: flex;
   justify-content: safe center;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
@@ -73,4 +73,29 @@ section.lab {
 
 .lab .hero button:hover {
   background: #357abd;
+}
+
+.header {
+  color: #f1f1f1;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.toggle {
+  padding: 5px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background-color: white;
+}
+
+@keyframes shine {
+  from { background-position: 0% }
+  to { background-position: 200% }
 }
