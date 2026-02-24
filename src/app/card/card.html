@@ -1,4 +1,7 @@
-<div class="card">
+<div 
+    class="card"
+    (click)="toggleExpand()"
+>
     <h3>{{ city.name }}</h3>
     @if(city.icon) {
         <img
@@ -8,4 +11,16 @@
     }
     <p class="temp">{{ city.temp }}°C</p>
     <p class="desc">{{ city.description }}</p>
+
+    @if (isExpanded) {
+        <div class="expandable">
+            @for (item of forecast$ | async; track $index) {
+                <p>
+                    {{ item.date }}
+                    <mat-icon fontIcon="swap_horiz" aria-hidden="false"></mat-icon>
+                    {{ item.temp }} / {{ item.temp }}
+                </p>
+            }
+        </div>
+    }
 </div>

@@ -1,3 +1,4 @@
+import { Weather } from './../models/weather.models';
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -46,25 +47,13 @@ export class Forecast implements OnInit {
   }
 
   fetchWeather(city: string) {
-    return this.forecastService.getWeather(city).pipe(
-      map((res: any) => ({
+    return this.forecastService.getWeather<Weather>(city).pipe(
+      map((res: Weather) => ({
         name: res.name,
-        temp: res.main?.temp ?? 'Error',
+        temp: res.main?.temp.toFixed(0).replace('-0', '0'),
         description: res.weather[0].description,
         icon: res.weather[0].icon
       }))
-    );
-  }
-  
-  fetchForecast(city: string) {
-    return this.forecastService.getForecast(city).pipe(
-      map((res: any) => {
-        const points = res.list.filter((_: any, i: number) => i % 8 === 0).slice(0, 5);
-        return points.map((p: any) => ({
-          date: new Date(p.dt * 1000).toLocaleDateString(),
-          temp: p.main.temp
-        }));
-      })
     );
   }
 

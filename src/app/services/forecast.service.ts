@@ -12,11 +12,11 @@ export class ForecastService {
 
     constructor(private http: HttpClient) {}
 
-    getWeather(city: string) {
-        return this.http.get(`${this.apiUrl}${city}&appid=${this.apiKey}&units=metric`);
+    getWeather<T>(city: string) {
+        return this.http.get<T>(`${this.apiUrl}${city}&appid=${this.apiKey}&units=metric`);
     }
 
-    getForecast(city: string) {
-        return this.http.get(`${this.forecastUrl}${city}&appid=${this.apiKey}&units=metric`);
+    getForecast<T>(city: string) {
+        return this.http.get<T>(`${this.forecastUrl}${city}&appid=${this.apiKey}&units=metric`);
     }
 }
