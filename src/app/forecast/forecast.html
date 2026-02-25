@@ -3,9 +3,6 @@
     <h1>
       Weather Dashboard
     </h1>
-    <button [matTooltip]="execStyle === 'sequential' ? 'Toggle Parallel execution' : 'Toggle Sequential execution'" class="toggle" style="display: flex" (click)="toggleExecStyle()">
-      <mat-icon fontIcon="swap_horiz" aria-hidden="false"></mat-icon>
-    </button>
   </header>
 </div>
 
@@ -22,12 +19,34 @@
       </div>
     </div>
   </section>
+
+  <section class="buttons">
+    <div class="execStyle">
+      @for (item of execStyles; track $index) {
+        <button
+          matButton="elevated"
+          [class.selected]="execStyle === item.toLowerCase()"
+          (click)="toggleExecStyle(item.toLowerCase())"
+        >
+          {{ item }}
+        </button>
+      }
+    </div>
+
+    <button matButton="elevated" (click)="collapse()">
+      {{ areAllCollapsed ? 'Fold all' : 'Collapse all' }}
+    </button>
+  </section>
   
   <section class="featured">
     @if (data$ | async; as data) {
       <div class="card-grid">
         @for (city of data; track $index) {
-          <app-card [city]="city"></app-card>
+          <app-card
+            [city]="city"
+            [collapseAll]="areAllCollapsed"
+            (toggle)="onToggle($event)"
+          ></app-card>
         }
       </div>
     } @else {

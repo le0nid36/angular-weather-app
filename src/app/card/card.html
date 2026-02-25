@@ -1,24 +1,24 @@
-<div 
+<div
     class="card"
     (click)="toggleExpand()"
 >
-    <h3>{{ city.name }}</h3>
-    @if(city.icon) {
+    <h3>{{ city.weather.name }}</h3>
+    @if(city.weather.icon) {
         <img
-            [src]="'https://openweathermap.org/img/wn/' + city.icon + '@2x.png'"
+            [src]="'https://openweathermap.org/img/wn/' + city.weather.icon + '@2x.png'"
             alt="Weather icon"
         />
     }
-    <p class="temp">{{ city.temp }}°C</p>
-    <p class="desc">{{ city.description }}</p>
+    <p class="temp">{{ city.weather.temp }}°C</p>
+    <p class="desc">{{ city.weather.description }}</p>
 
-    @if (isExpanded) {
+    @if (city.forecast && city.forecast.length > 0) {
         <div class="expandable">
-            @for (item of forecast$ | async; track $index) {
+            @for (item of city.forecast; track $index) {
                 <p>
-                    {{ item.date }}
+                    {{ item.weekDay }}
                     <mat-icon fontIcon="swap_horiz" aria-hidden="false"></mat-icon>
-                    {{ item.temp }} / {{ item.temp }}
+                    {{ item.weekDayTempLow }} / {{ item.weekDayTempHigh }}
                 </p>
             }
         </div>

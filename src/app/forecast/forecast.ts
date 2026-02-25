@@ -1,8 +1,8 @@
-import { Weather } from './../models/weather.models';
+import { IData, IForecast, IWeather } from './../models/weather.models';
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { concatMap, delay, forkJoin, from, map, Observable, of, toArray } from 'rxjs';
+import { concatMap, forkJoin, from, map, Observable, of, tap, toArray } from 'rxjs';
 import { MatAnchor } from "@angular/material/button";
 import { ForecastService } from '../services/forecast.service';
 import { Card } from '../card/card';
@@ -19,8 +19,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class Forecast implements OnInit {
   featuredCities = 'New York, Tokyo, London';
   execStyle: 'sequential' | 'parallel' = 'sequential';
+  execStyles = ['Sequential', 'Parallel'];
+  areAllCollapsed: boolean = false;
+  expandedSet = new Set<string>();
+  weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  data$: Observable<any[]> = of([]);
+  data$: Observable<IData[]> = of([]);
 
   constructor(private forecastService: ForecastService) {}
 
@@ -28,9 +32,38 @@ export class Forecast implements OnInit {
     this.search();
   }
 
-  toggleExecStyle() {
+  toggleExecStyle(execStyle: string) {
+    if (this.execStyle === execStyle) {
+      return;
+    }
+
     this.execStyle = this.execStyle === 'sequential' ? 'parallel' : 'sequential';
     this.search();
+  }
+
+  collapse() {
+    this.areAllCollapsed = !this.areAllCollapsed;
+
+    if (this.execStyle === 'sequential') {
+      this.runSequential(this.areAllCollapsed);
+    } else {
+      this.runParallel(this.areAllCollapsed);
+    }
+  }
+
+  onToggle(city: string) {
+    if(this.expandedSet.has(city)) {
+      this.expandedSet.delete(city);
+      return;
+    }
+
+    this.expandedSet.add(city);
+    
+    if (this.execStyle === 'sequential') {
+      this.runSequential(this.areAllCollapsed);
+    } else {
+      this.runParallel(this.areAllCollapsed);
+    }
   }
 
   search(): void {
@@ -40,15 +73,15 @@ export class Forecast implements OnInit {
     };
 
     if (this.execStyle === 'sequential') {
-      this.runSequential();
+      this.runSequential(this.areAllCollapsed);
     } else {
-      this.runParallel();
+      this.runParallel(this.areAllCollapsed);
     }
   }
 
-  fetchWeather(city: string) {
-    return this.forecastService.getWeather<Weather>(city).pipe(
-      map((res: Weather) => ({
+  fetchWeather(city: string): Observable<IWeather> {
+    return this.forecastService.getWeather<IWeather>(city).pipe(
+      map((res: any) => ({
         name: res.name,
         temp: res.main?.temp.toFixed(0).replace('-0', '0'),
         description: res.weather[0].description,
@@ -57,23 +90,43 @@ export class Forecast implements OnInit {
     );
   }
 
-  runSequential() {
+  fetchForecast(city: string): Observable<IForecast[]> {
+    return this.forecastService.getForecast<IForecast[]>(city)
+    .pipe(
+      map((res: any) => {
+        const points = res.list.filter((_: any, i: number) => i % 8 === 0).slice(0, 5);
+        return points.map((p: {dt: number, main: {temp_max: number, temp_min: number}}) => ({
+          weekDay: this.weekDays[new Date(p.dt * 1000).getDay()],
+          weekDayTempHigh: p.main.temp_max.toFixed(0).replace('-0', '0'),
+          weekDayTempLow: p.main.temp_min.toFixed(0).replace('-0', '0'),
+        }));
+      })
+    );
+  }
+
+  runSequential(fetchAdditionalInfo: boolean) {
     const cities = this.featuredCities.split(',').map(c => c.trim());
 
     this.data$ = from(cities).pipe(
-      concatMap(city => this.fetchWeather(city)),
-      delay(500),
+      concatMap(city => 
+        forkJoin({
+          weather: this.fetchWeather(city),
+          forecast: fetchAdditionalInfo ? this.fetchForecast(city) : of(null)
+        })
+      ),
+      tap(data => console.log('data', data)),
       toArray()
     );
   }
 
-  runParallel() {
+  runParallel(fetchAdditionalInfo: boolean) {
     const cities = this.featuredCities.split(',').map(c => c.trim());
 
-    const requests = cities.map(city =>
-      this.fetchWeather(city).pipe(delay(500))
-    );
-
-    this.data$ = forkJoin(requests);
+    this.data$ = forkJoin(cities.map(city =>
+      forkJoin({
+        weather: this.fetchWeather(city),
+        forecast: fetchAdditionalInfo ? this.fetchForecast(city) : of(null)
+      })
+    ));
   }
 }

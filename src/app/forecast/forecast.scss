@@ -94,3 +94,20 @@ section.lab {
 .toggle:hover {
   background-color: white;
 }
+
+.buttons {
+  width: 40rem;
+  display: flex;
+  justify-content: space-between;
+
+  div.execStyle {
+    button {
+      border-radius: 0;
+    }
+  }
+
+  button.selected {
+    color: white;
+    background-color: #4a90e2;
+  }
+}
